@@ -7,7 +7,7 @@ Raycast utilities and visualizer for Unity (all raycast types supported). Not re
 
 
 ## Requirements
-* No dependencies
+* [Simple Man - Utilities](https://github.com/IgorChebotar/Utilities/releases)
 
 ## Quick start
 1. Add 'Raycast drawer' game object on your scene by right click inside the 'Hierarchy' window and select 'Raycast Drawer' option.
