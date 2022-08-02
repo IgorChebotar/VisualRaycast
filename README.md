@@ -9,6 +9,10 @@ Raycast utilities and visualizer for Unity (all raycast types supported). Not re
 ## Requirements
 * [Simple Man - Utilities](https://github.com/IgorChebotar/Utilities/releases)
 
+
+## How to install plugin?
+Open installer by the click on Tools -> Simple Man -> Master Installer -> [Plugins' name] -> Click 'Install' button. If you don't have one or more of the plugins this plugin depends on, you must install it first.
+
 ## Quick start
 1. Add 'Raycast drawer' game object on your scene by right click inside the 'Hierarchy' window and select 'Raycast Drawer' option.
 2. Open your C# class that calls '_Phisics.Raycast_' function (or create new C# MonoBehavior class) and add a _'using SimpleMan.VisualRaycast'_ line.
