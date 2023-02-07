@@ -17,4 +17,3 @@ MonoBehaviour:
   _hitPointRadius: 0.2
   _hitColor: {r: 0, g: 1, b: 0, a: 1}
   _missColor: {r: 1, g: 0, b: 0, a: 1}
-  _displayForSelectedObjectsOnly: 0
