@@ -11,6 +11,9 @@ namespace SimpleMan.VisualRaycastDemo
 
         [SerializeField] private Vector3 _size = new Vector3(3, 3, 3);
 
+
+
+        
         private void Start()
         {
             this.RepeatForever(Tick, _raycastFrequency);
@@ -18,13 +21,12 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualRaycast.VisualPhysics.
+            VisualPhysics.
                 BoxOverlap().
                 FromGameObjectInWorld(gameObject).
                 WithSize(_size).
-                UseDefaultLayerMask().
-                UseRotation(transform.rotation).
-                DontIgnoreAnything();
+                WithRotationOf(gameObject).
+                ContinueWithDefaultParams();
         }
     }
 }

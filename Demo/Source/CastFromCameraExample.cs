@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
 {
-    public class RaycastFromCameraToWorldExample : MonoBehaviour
+    public class CastFromCameraExample : MonoBehaviour
     {
         private const float JUMP_FORCE = 4f;
         

@@ -4313,7 +4313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f5ddf3016a92f47973eda1abf8d0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastFrequency: 1
+  _raycastFrequency: 0.8
   _size: {x: 3, y: 3, z: 3}
 --- !u!65 &1673262264
 BoxCollider:
@@ -4895,7 +4895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f5ddf3016a92f47973eda1abf8d0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastFrequency: 0.612
+  _raycastFrequency: 0.8
   _size: {x: 3, y: 3, z: 3}
 --- !u!1 &1840880480
 GameObject:

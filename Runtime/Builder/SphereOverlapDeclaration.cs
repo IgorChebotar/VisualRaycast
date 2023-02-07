@@ -7,39 +7,48 @@ namespace SimpleMan.VisualRaycast
 {
     public struct SphereOverlapDeclaration
     {
-        public struct FromData
+        public struct SetRadius
         {
-            public struct RadiusData
+            public struct SetLayerMask
             {
-                public struct LayerMaskData
+                public struct SetIgnoredColliders
                 {
-                    internal readonly Vector3 from;
-                    internal readonly float radius;
-                    internal readonly LayerMask mask;
+                    internal Vector3 originPoint;
+                    internal LayerMask mask;
+                    internal float radius;
 
-                    public LayerMaskData(
-                        Vector3 from,
-                        float radius,
-                        LayerMask mask)
+                    public SetIgnoredColliders(Vector3 originPoint, float radius, LayerMask mask)
                     {
-                        this.from = from;
+                        this.originPoint = originPoint;
                         this.radius = radius;
                         this.mask = mask;
                     }
 
                     public PhysicsOverlapResult DontIgnoreAnything()
                     {
-                        return InternalPhysicsCast.SphereOverlap(from, radius, mask, null);
+                        return InternalPhysicsCast.SphereOverlap(
+                            originPoint,
+                            radius,
+                            mask,
+                            null);
                     }
 
                     public PhysicsOverlapResult IgnoreColliders(params Collider[] collidersToIgnore)
                     {
-                        return InternalPhysicsCast.SphereOverlap(from, radius, mask, collidersToIgnore);
+                        return InternalPhysicsCast.SphereOverlap(
+                            originPoint,
+                            radius,
+                            mask,
+                            collidersToIgnore);
                     }
 
                     public PhysicsOverlapResult IgnoreObjects(params GameObject[] objectsToIgnore)
                     {
-                        return IgnoreColliders(GetCollidersFromObjects(objectsToIgnore));
+                        return InternalPhysicsCast.SphereOverlap(
+                            originPoint,
+                            radius,
+                            mask,
+                            GetCollidersFromObjects(objectsToIgnore));
                     }
 
                     private Collider[] GetCollidersFromObjects(GameObject[] objectsToIgnore)
@@ -60,68 +69,74 @@ namespace SimpleMan.VisualRaycast
                     }
                 }
 
-                internal readonly Vector3 from;
-                internal readonly float radius;
 
-                public RadiusData(
-                    Vector3 from,
-                    float radius)
+
+
+                internal Vector3 originPoint;
+                internal float radius;
+
+                public SetLayerMask(Vector3 originPoint, float radius)
                 {
-                    this.from = from;
+                    this.originPoint = originPoint;
                     this.radius = radius;
                 }
 
                 public PhysicsOverlapResult ContinueWithDefaultParams()
                 {
-                    LayerMaskData layerMaskData = new LayerMaskData(
-                        from,
-                        radius,
-                        UnityEngine.Physics.DefaultRaycastLayers);
-
-                    return layerMaskData.DontIgnoreAnything();
+                    return UseDefaultLayerMask().DontIgnoreAnything();
                 }
 
-                public LayerMaskData UseDefaultLayerMask()
+                public SetIgnoredColliders UseDefaultLayerMask()
                 {
-                    return UseCustomLayerMask(UnityEngine.Physics.DefaultRaycastLayers);
+                    return new SetIgnoredColliders(originPoint, radius, Physics.DefaultRaycastLayers);
                 }
 
-                public LayerMaskData UseCustomLayerMask(LayerMask mask)
+                public SetIgnoredColliders UseCustomLayerMask(LayerMask mask)
                 {
-                    return new LayerMaskData(
-                        from,
-                        radius,
-                        mask);
+                    return new SetIgnoredColliders(originPoint, radius, mask);
                 }
             }
 
 
 
-            internal readonly Vector3 from;
 
-            public FromData(Vector3 from)
+            internal Vector3 originPoint;
+
+            public SetRadius(Vector3 originPoint)
             {
-                this.from = from;
+                this.originPoint = originPoint;
             }
 
-            public RadiusData WithRadius(float radius)
+            public SetLayerMask WithRadius(float radius)
             {
-                if(radius <= 0)
-                {
-                    throw new ArgumentException(
-                        "Radius of overlap sphere must be positive");
-                }
-
-                return new RadiusData(from, radius);
+                return new SetLayerMask(originPoint, radius);
             }
         }
 
-        public FromData FromPointInWorld(Vector3 point)
+
+
+
+        public SetRadius FromMainCamera()
         {
-            return new FromData(point);
+            return FromCamera(Camera.main);
         }
 
-        public FromData FromGameObjectInWorld(Transform point)
+        public SetRadius FromCamera(Camera point)
+        {
+            if (point.NotExist())
+            {
+                throw new ArgumentNullException(nameof(point));
+            }
+
+            return new SetRadius(point.transform.position);
+        }
+
+        public SetRadius FromPointInWorld(Vector3 point)
+        {
+            return new SetRadius(point);
+        }
+
+        public SetRadius FromGameObjectInWorld(Transform point)
         {
             if (point.NotExist())
             {
@@ -131,8 +146,13 @@ namespace SimpleMan.VisualRaycast
             return FromPointInWorld(point.position);
         }
 
-        public FromData FromGameObjectInWorld(GameObject point)
+        public SetRadius FromGameObjectInWorld(GameObject point)
         {
+            if (point.NotExist())
+            {
+                throw new ArgumentNullException(nameof(point));
+            }
+
             return FromGameObjectInWorld(point.transform);
         }
     }

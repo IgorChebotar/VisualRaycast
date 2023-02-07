@@ -7,40 +7,55 @@ namespace SimpleMan.VisualRaycast
 {
     public struct BoxOverlapDeclaration
     {
-        public struct FromData
+        public struct SetSize
         {
-            public struct SizeData
+            public struct SetOrientation
             {
-                public struct LayerMaskData
+                public struct SetLayerMask
                 {
-                    public struct RotationData
+                    public struct SetIgnoredColliders
                     {
-                        internal readonly Vector3 from;
-                        internal readonly Vector3 size;
-                        internal readonly LayerMask mask;
-                        internal readonly Quaternion rotation;
+                        internal Vector3 originPoint;
+                        internal Vector3 size;
+                        internal Quaternion orientation;
+                        internal LayerMask mask;
 
-                        public RotationData(Vector3 from, Vector3 size, LayerMask mask, Quaternion rotation)
+                        public SetIgnoredColliders(Vector3 originPoint, Vector3 size, Quaternion orientation, LayerMask mask)
                         {
-                            this.from = from;
+                            this.originPoint = originPoint;
                             this.size = size;
+                            this.orientation = orientation;
                             this.mask = mask;
-                            this.rotation = rotation;
                         }
 
                         public PhysicsOverlapResult DontIgnoreAnything()
                         {
-                            return InternalPhysicsCast.BoxOverlap(from, size, rotation, mask, null);
+                            return InternalPhysicsCast.BoxOverlap(
+                                originPoint,
+                                size,
+                                orientation,
+                                mask,
+                                null);
                         }
 
                         public PhysicsOverlapResult IgnoreColliders(params Collider[] collidersToIgnore)
                         {
-                            return InternalPhysicsCast.BoxOverlap(from, size, rotation, mask, collidersToIgnore);
+                            return InternalPhysicsCast.BoxOverlap(
+                                originPoint,
+                                size,
+                                orientation,
+                                mask,
+                                collidersToIgnore);
                         }
 
                         public PhysicsOverlapResult IgnoreObjects(params GameObject[] objectsToIgnore)
                         {
-                            return IgnoreColliders(GetCollidersFromObjects(objectsToIgnore));
+                            return InternalPhysicsCast.BoxOverlap(
+                                originPoint,
+                                size,
+                                orientation,
+                                mask,
+                                GetCollidersFromObjects(objectsToIgnore));
                         }
 
                         private Collider[] GetCollidersFromObjects(GameObject[] objectsToIgnore)
@@ -61,109 +76,139 @@ namespace SimpleMan.VisualRaycast
                         }
                     }
 
-                    internal readonly Vector3 from;
-                    internal readonly Vector3 size;
-                    internal readonly LayerMask mask;
 
-                    public LayerMaskData(Vector3 from, Vector3 size, LayerMask mask)
+
+
+                    internal Vector3 originPoint;
+                    internal Quaternion orientation;
+                    internal Vector3 size;
+
+                    public SetLayerMask(Vector3 originPoint, Vector3 size, Quaternion orientation)
                     {
-                        this.from = from;
+                        this.originPoint = originPoint;
                         this.size = size;
-                        this.mask = mask;
+                        this.orientation = orientation;
                     }
 
                     public PhysicsOverlapResult ContinueWithDefaultParams()
                     {
-                        return new RotationData(from, size, mask, Quaternion.identity).DontIgnoreAnything();
+                        return UseDefaultLayerMask().DontIgnoreAnything();
                     }
 
-                    public RotationData UseRotation(Quaternion rotation)
+                    public SetIgnoredColliders UseDefaultLayerMask()
                     {
-                        return new RotationData(from, size, mask, rotation);
+                        return new SetIgnoredColliders(originPoint, size, orientation, Physics.DefaultRaycastLayers);
                     }
 
-                    public RotationData UseRotationFrom(Transform target)
+                    public SetIgnoredColliders UseCustomLayerMask(LayerMask mask)
                     {
-                        if (target.NotExist())
-                        {
-                            throw new ArgumentNullException(nameof(target));
-                        }
-
-                        return UseRotation(target.rotation);
-                    }
-
-                    public RotationData UseRotationFrom(GameObject target)
-                    {
-                        if (target.NotExist())
-                        {
-                            throw new ArgumentNullException(nameof(target));
-                        }
-
-                        return UseRotationFrom(target.transform);
+                        return new SetIgnoredColliders(originPoint, size, orientation, mask);
                     }
                 }
 
-                internal readonly Vector3 from;
-                internal readonly Vector3 size;
 
-                public SizeData(
-                    Vector3 from,
-                    Vector3 size)
+
+                internal Vector3 originPoint;
+                internal Vector3 size;
+
+                public SetOrientation(Vector3 originPoint, Vector3 size)
                 {
-                    this.from = from;
+                    this.originPoint = originPoint;
                     this.size = size;
                 }
-
-                public PhysicsOverlapResult ContinueWithDefaultParams()
+              
+                public SetLayerMask WithDefaultRotation()
                 {
-                    LayerMaskData layerMaskData = new LayerMaskData(
-                        from,
-                        size,
-                        UnityEngine.Physics.DefaultRaycastLayers);
-
-                    return layerMaskData.ContinueWithDefaultParams();
+                    return WithRotation(Quaternion.identity);
                 }
 
-                public LayerMaskData UseDefaultLayerMask()
+                public SetLayerMask WithRotation(Quaternion value)
                 {
-                    return UseCustomLayerMask(UnityEngine.Physics.DefaultRaycastLayers);
+                    return new SetLayerMask(originPoint, size, value);
                 }
 
-                public LayerMaskData UseCustomLayerMask(LayerMask mask)
+                public SetLayerMask WithRotationOf(Transform target)
                 {
-                    return new LayerMaskData(
-                        from,
-                        size,
-                        mask);
+                    return new SetLayerMask(originPoint, size, GetTargetRotationOrDefault());
+
+
+                    Quaternion GetTargetRotationOrDefault()
+                    {
+                        if (target.NotExist())
+                        {
+                            PrintToConsole.Warning(
+                                Constants.PLUGIN_DISPLAYED_NAME,
+                                $"Argument of function '{nameof(WithRotationOf)}' doesn't exist. " +
+                                $"The process will continue with default rotation.");
+
+                            return Quaternion.identity;
+                        }
+
+                        return target.rotation;
+                    }
+                }
+
+                public SetLayerMask WithRotationOf(GameObject target)
+                {
+                    return new SetLayerMask(originPoint, size, GetTargetRotationOrDefault());
+
+
+                    Quaternion GetTargetRotationOrDefault()
+                    {
+                        if (target.NotExist())
+                        {
+                            PrintToConsole.Warning(
+                                Constants.PLUGIN_DISPLAYED_NAME,
+                                $"Argument of function '{nameof(WithRotationOf)}' doesn't exist. " +
+                                $"The process will continue with default rotation.");
+
+                            return Quaternion.identity;
+                        }
+
+                        return target.transform.rotation;
+                    }
                 }
             }
 
 
 
-            internal readonly Vector3 from;
+            internal Vector3 originPoint;
 
-            public FromData(Vector3 from)
+            public SetSize(Vector3 originPoint)
             {
-                this.from = from;
+                this.originPoint = originPoint;
             }
 
-            public SizeData WithSize(Vector3 size)
+            public SetOrientation WithSize(Vector3 size)
             {
-                return new SizeData(from, size);
-            }
-
-            public SizeData WithExtents(Vector3 extents)
-            {
-                return WithSize(extents * 0.5f);
+                return new SetOrientation(originPoint, size);
             }
         }
 
-        public FromData FromPointInWorld(Vector3 point)
+
+
+
+        public SetSize FromMainCamera()
         {
-            return new FromData(point);
+            return FromCamera(Camera.main);
         }
 
-        public FromData FromGameObjectInWorld(Transform point)
+        public SetSize FromCamera(Camera point)
+        {
+            if (point.NotExist())
+            {
+                throw new ArgumentNullException(nameof(point));
+            }
+
+            return new SetSize(point.transform.position);
+        }
+
+        public SetSize FromPointInWorld(Vector3 point)
+        {
+            return new SetSize(point);
+        }
+
+        public SetSize FromGameObjectInWorld(Transform point)
         {
             if (point.NotExist())
             {
@@ -173,8 +218,13 @@ namespace SimpleMan.VisualRaycast
             return FromPointInWorld(point.position);
         }
 
-        public FromData FromGameObjectInWorld(GameObject point)
+        public SetSize FromGameObjectInWorld(GameObject point)
         {
+            if (point.NotExist())
+            {
+                throw new ArgumentNullException(nameof(point));
+            }
+
             return FromGameObjectInWorld(point.transform);
         }
     }

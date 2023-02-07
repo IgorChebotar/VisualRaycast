@@ -11,6 +11,12 @@ namespace SimpleMan.VisualRaycastDemo
         [Range(0.1f, 3f)]
         [SerializeField] private float _radius = 0.5f;
 
+        [Range(1, 100)]
+        [SerializeField] private float _distance = 15f;
+
+
+        
+
         private void Start()
         {
             this.RepeatForever(Tick, _raycastFrequency);
@@ -22,8 +28,9 @@ namespace SimpleMan.VisualRaycastDemo
                 SphereCast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).
+                MultiHit().
                 WithRadius(_radius).
-                MultiHits().
+                WithDistance(_distance).
                 ContinueWithDefaultParams();
         }
     }

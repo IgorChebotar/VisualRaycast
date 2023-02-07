@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
 {
-    public class RaycastFromGameObjectMultiHitsExample : MonoBehaviour
+    public class RaycastMultiHitsExample : MonoBehaviour
     {
         [Range(0f, 1f)]
         [SerializeField] private float _raycastFrequency = 0.4f;

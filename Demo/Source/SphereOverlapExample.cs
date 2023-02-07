@@ -12,6 +12,9 @@ namespace SimpleMan.VisualRaycastDemo
         [Range(1f, 15f)]
         [SerializeField] private float _radius = 6;
 
+
+        
+        
         private void Start()
         {
             this.RepeatForever(Tick, _raycastFrequency);
@@ -19,7 +22,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualRaycast.VisualPhysics.
+            VisualPhysics.
                 SphereOverlap().
                 FromGameObjectInWorld(gameObject).
                 WithRadius(_radius).

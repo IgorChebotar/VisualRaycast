@@ -4827,7 +4827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b522edfb4805849a2278ffaddac365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastFrequency: 0.632
+  _raycastFrequency: 0.25
   _radius: 6
 --- !u!1 &1840880480
 GameObject:
