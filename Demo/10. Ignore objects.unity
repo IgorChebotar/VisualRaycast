@@ -874,8 +874,9 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Raycast from main camera into mouse world position. Click on yellow cube
-    in runtime to see the visualization. \n\nRemember, gizmos button enabled to see
-    actions with physics! \n\nLook at the script on camera to learn more."
+    in runtime to see the visualization. Clicks on blue cubes will be ignored.\n\nRemember,
+    gizmos button enabled to see actions with physics! \n\nLook at the script on
+    camera to learn more."
 --- !u!222 &318248426
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1341,7 +1342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3cda9bdff0b4b8b4fb1f732082f4ef62, type: 2}
+  - {fileID: 2100000, guid: cd95581ff45912f46be1fe718d9cac21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1711,7 +1712,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3cda9bdff0b4b8b4fb1f732082f4ef62, type: 2}
+  - {fileID: 2100000, guid: cd95581ff45912f46be1fe718d9cac21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2642,7 +2643,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3cda9bdff0b4b8b4fb1f732082f4ef62, type: 2}
+  - {fileID: 2100000, guid: cd95581ff45912f46be1fe718d9cac21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2756,7 +2757,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3cda9bdff0b4b8b4fb1f732082f4ef62, type: 2}
+  - {fileID: 2100000, guid: cd95581ff45912f46be1fe718d9cac21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3214,7 +3215,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3cda9bdff0b4b8b4fb1f732082f4ef62, type: 2}
+  - {fileID: 2100000, guid: cd95581ff45912f46be1fe718d9cac21, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3353,14 +3354,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebd2c6cda5deee342a274010fd501839, type: 3}
+  m_Script: {fileID: 11500000, guid: db1365e0a56c54d43ab42454625fa396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectsToIgnore:
+  _ignoreObjects:
   - {fileID: 574752808}
   - {fileID: 785466673}
   - {fileID: 774125877}
-  - {fileID: 1962221779}
+  - {fileID: 866641668}
+  - {fileID: 454257868}
 --- !u!1 &986039564
 GameObject:
   m_ObjectHideFlags: 0

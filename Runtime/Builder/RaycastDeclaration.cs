@@ -253,7 +253,7 @@ namespace SimpleMan.VisualRaycast
                 return complexityData.ContinueWithDefaultParams();
             }
 
-            public SetLayer Single()
+            public SetLayer SingleHit()
             {
                 return new SetLayer(
                     from,

@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
 {
-    public class CastFromCameraExample : MonoBehaviour
+    public class IgnoreObjectExample : MonoBehaviour
     {
         private const float JUMP_FORCE = 4f;
+
+        [SerializeField] private GameObject[] _ignoreObjects;
 
         private void Update()
         {
@@ -20,7 +22,9 @@ namespace SimpleMan.VisualRaycastDemo
                 Raycast().
                 FromMainCamera().
                 ToMousePositionInWorld().
-                ContinueWithDefaultParams();
+                SingleHit().
+                UseDefaultLayerMask().
+                IgnoreObjects(_ignoreObjects);
 
             //No hits? -> Ignore next code
             if (!result)
