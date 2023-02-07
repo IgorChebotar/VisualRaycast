@@ -1,11 +1,13 @@
 {
-    "name": "SimpleMan.VisualRaycast",
+    "name": "SimpleMan.VisualRaycast.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:3cd57a010316e6244b4788db045e27ef",
-        "GUID:768624e97d3a36c449c336a988ba7749"
+        "GUID:c67a2d7bec70c8c42ae7c16dd9c7c7b1",
+        "GUID:3cd57a010316e6244b4788db045e27ef"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

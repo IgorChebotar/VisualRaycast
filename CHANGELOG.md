@@ -14,3 +14,7 @@
 ## [2.3.0] - 2022-08-02
 ### Removed
 * Old installer
+
+
+## [3.0.0] - 2023-02-04
+* Refactored

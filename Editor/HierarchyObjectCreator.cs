@@ -1,25 +1,34 @@
-using UnityEngine;
+using SimpleMan.VisualRaycast.Presentation;
+using SimpleMan.Utilities;
 using UnityEditor;
+using UnityEngine;
 
-
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisualRaycast.Editor
 {
     public static class HierarchyObjectCreator
     {
-        //------METHODS
-        [MenuItem("GameObject/Raycast Drawer", false, 10)]
+        [MenuItem("GameObject/Visual Raycast Drawer", false)]
         public static void CreateVisualDrawer(MenuCommand menuCommand)
         {
-            // Create a custom game object
-            GameObject drawer = new GameObject("RaycastDrawer", typeof(SimpleMan.VisualRaycast.VisualCastDrawer));
+            VisualRaycastDrawer visualizer = Object.FindObjectOfType<VisualRaycastDrawer>();
+            if (visualizer.Exist())
+            {
+                if (EditorUtility.DisplayDialog(
+                    "Invalid operation",
+                    "Visual raycast drawer already exist on current scene",
+                    "Select it", "Ok"))
+                {
+                    Selection.activeGameObject = visualizer.gameObject;
+                }
 
-            // Ensure it gets reparented if this was a context click (otherwise does nothing)
+                return;
+            }
+
+            GameObject drawer = new GameObject("VisualRaycastDrawer", typeof(VisualRaycastDrawer));
             GameObjectUtility.SetParentAndAlign(drawer.gameObject, menuCommand.context as GameObject);
-
-            // Register the creation in the undo system
             Undo.RegisterCreatedObjectUndo(drawer, "Create " + drawer.name);
 
             Selection.activeObject = drawer;
-        }
+        }     
     }
 }

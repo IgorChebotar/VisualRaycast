@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:Label text="Physics Visualization" display-tooltip-when-elided="true" style="font-size: 18px; -unity-font-style: bold; padding-left: 4px; padding-bottom: 10px;" />
+    <ui:SliderInt picking-mode="Ignore" label="Max Draw Tasks Count" value="2048" high-value="8192" name="MaxDrawTasksCount" low-value="128" show-input-field="true" />
+    <ui:Slider picking-mode="Ignore" label="Gizmo Life Time" value="1" high-value="5" low-value="0" name="GizmoLifeTime" show-input-field="true" />
+    <ui:Slider picking-mode="Ignore" label="Hit Point Radius" value="0.2" high-value="2" name="HitPointRadius" inverted="false" show-input-field="true" />
+    <uie:ColorField label="Hit Color" value="#00FF00FF" show-alpha="false" name="HitColor" />
+    <uie:ColorField label="Miss Color" value="#FF0000FF" show-alpha="false" name="MissColor" />
+    <ui:Button text="Reset" display-tooltip-when-elided="true" name="ResetButton" style="height: 30px;" />
+</ui:UXML>
