@@ -1,13 +1,15 @@
 ﻿using SimpleMan.AsyncOperations;
-using SimpleMan.VisualRaycast;
 using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
 {
-    public class RaycastFromGameObjectMultipleHitsExample : MonoBehaviour
+    public class SpherecastFromGameObjectExample : MonoBehaviour
     {
         [Range(0f, 1f)]
         [SerializeField] private float _raycastFrequency = 0.4f;
+
+        [Range(0.1f, 3f)]
+        [SerializeField] private float _radius = 0.5f;
 
         private void Start()
         {
@@ -17,10 +19,10 @@ namespace SimpleMan.VisualRaycastDemo
         private void Tick()
         {
             VisualRaycast.VisualPhysics.
-                Raycast().
+                SphereCast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).
-                Multiple().
+                WithRadius(_radius).
                 ContinueWithDefaultParams();
         }
     }

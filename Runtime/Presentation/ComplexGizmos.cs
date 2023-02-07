@@ -41,11 +41,6 @@ namespace SimpleMan.VisualRaycast.Presentation
 
         public static void DrawBox(Vector3 center, Vector3 size, Quaternion rotation, Color color)
         {
-
-        }
-
-        public static void DrawBoxOLD(Vector3 center, Vector3 size, Quaternion rotation, Color color)
-        {
             Color previousColor = Gizmos.color;
             Gizmos.color = color;
 

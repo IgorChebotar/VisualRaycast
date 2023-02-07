@@ -5,10 +5,11 @@ using UnityEngine;
 
 namespace SimpleMan.VisualRaycast
 {
-
     internal static class InternalPhysicsCast
     {
         public static event Action<RaycastInfo> OnRaycast;
+        public static event Action<SpherecastInfo> OnSpherecast;
+        public static event Action<BoxcastInfo> OnBoxcast;
         public static event Action<SphereOverlapInfo> OnSphereOverlap;
         public static event Action<BoxOverlapInfo> OnBoxOverlap;
 
@@ -27,7 +28,42 @@ namespace SimpleMan.VisualRaycast
                 RaycastSingle(from, direction, distance, collidersToIgnore, layerMask) :
                 RaycastComplex(from, direction, distance, collidersToIgnore, layerMask);
 
-            OnRaycast?.Invoke(new RaycastInfo(from, direction, distance, singleCast, result, RaycastInfo.ECastType.Raycast));
+            OnRaycast?.Invoke(new RaycastInfo(from, direction, distance, singleCast, result));
+            return result;
+        }
+
+        public static PhysicsCastResult Spherecast(
+            Vector3 from,
+            Vector3 direction,
+            float distance,
+            float radius,
+            bool singleCast,
+            Collider[] collidersToIgnore,
+            LayerMask layerMask)
+        {
+            PhysicsCastResult result = singleCast ?
+                SphereCastSingle(from, direction, radius, distance, collidersToIgnore, layerMask) :
+                SphereCastComplex(from, radius, direction, distance, collidersToIgnore, layerMask);
+
+            OnSpherecast?.Invoke(new SpherecastInfo(from, direction, radius, distance, singleCast, result));
+            return result;
+        }
+
+        public static PhysicsCastResult Boxcast(
+            Vector3 from,
+            Vector3 direction,
+            Vector3 size,
+            Quaternion orientation,
+            float distance,
+            bool singleCast,
+            Collider[] collidersToIgnore,
+            LayerMask layerMask)
+        {
+            PhysicsCastResult result = singleCast ?
+                BoxCastSingle(from, size, direction, distance, orientation, collidersToIgnore, layerMask) :
+                BoxCastComplex(from, size, direction, distance, orientation, collidersToIgnore, layerMask);
+
+            OnBoxcast?.Invoke(new BoxcastInfo(from, direction, size, orientation, distance, singleCast, result));
             return result;
         }
 
@@ -93,10 +129,10 @@ namespace SimpleMan.VisualRaycast
             if(hitsArray.Length == 0) 
                 return new PhysicsCastResult();
 
-            if(collidersToIgnore.NotExist() || collidersToIgnore.Length == 0)
-                return new PhysicsCastResult(hitsArray);
+            if(collidersToIgnore.Exist() && collidersToIgnore.Length > 0)
+                hitsArray = hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
 
-            hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
+            hitsArray = PhysicsUtilities.OrderHitsByDistance(from, hitsArray);
             return new PhysicsCastResult(hitsArray);
         }
 
@@ -160,15 +196,15 @@ namespace SimpleMan.VisualRaycast
             if (hitsArray.Length == 0)
                 return new PhysicsCastResult();
 
-            if (collidersToIgnore.NotExist() || collidersToIgnore.Length == 0)
-                return new PhysicsCastResult(hitsArray);
+            if (collidersToIgnore.Exist() && collidersToIgnore.Length > 0)
+                hitsArray = hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
 
-            hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
+            hitsArray = PhysicsUtilities.OrderHitsByDistance(from, hitsArray);
             return new PhysicsCastResult(hitsArray);
         }
 
         private static PhysicsCastResult BoxCastSingle(
-            Vector3 center,
+            Vector3 from,
             Vector3 size,
             Vector3 direction,
             float distance,
@@ -177,7 +213,7 @@ namespace SimpleMan.VisualRaycast
             LayerMask layerMask)
         {
             RaycastHit hit;
-            if (Physics.BoxCast(center, size * 0.5f, direction, out hit, orientation, distance, layerMask))
+            if (Physics.BoxCast(from, size * 0.5f, direction, out hit, orientation, distance, layerMask))
             {
                 if (collidersToIgnore != null && collidersToIgnore.Contains(hit.collider))
                     return new PhysicsCastResult();
@@ -188,7 +224,7 @@ namespace SimpleMan.VisualRaycast
         }
 
         private static PhysicsCastResult BoxCastComplex(
-            Vector3 center,
+            Vector3 from,
             Vector3 size,
             Vector3 direction,
             float distance,
@@ -197,7 +233,7 @@ namespace SimpleMan.VisualRaycast
             LayerMask layerMask)
         {
             RaycastHit[] hitsArray = Physics.BoxCastAll(
-                center,
+                from,
                 size * 0.5f,
                 direction,
                 orientation,
@@ -207,10 +243,10 @@ namespace SimpleMan.VisualRaycast
             if (hitsArray.Length == 0)
                 return new PhysicsCastResult();
 
-            if (collidersToIgnore.NotExist() || collidersToIgnore.Length == 0)
-                return new PhysicsCastResult(hitsArray);
+            if (collidersToIgnore.Exist() && collidersToIgnore.Length > 0)
+                hitsArray = hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
 
-            hitsArray.Where(x => !collidersToIgnore.Contains(x.collider)).ToArray();
+            hitsArray = PhysicsUtilities.OrderHitsByDistance(from, hitsArray);
             return new PhysicsCastResult(hitsArray);
         }
     }

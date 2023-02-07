@@ -48,15 +48,19 @@ namespace SimpleMan.VisualRaycast.Presentation
             _drawTasksToRemove = new List<DrawTask>(MaxDrawTasksCount);
 
             InternalPhysicsCast.OnRaycast += TryAddTask;
-            InternalPhysicsCast.OnSphereOverlap += AddTask;
-            InternalPhysicsCast.OnBoxOverlap += AddTask;
+            InternalPhysicsCast.OnSpherecast += TryAddTask;
+            InternalPhysicsCast.OnBoxcast += TryAddTask;
+            InternalPhysicsCast.OnSphereOverlap += TryAddTask;
+            InternalPhysicsCast.OnBoxOverlap += TryAddTask;
         }
 
         private void OnDisable()
         {
             InternalPhysicsCast.OnRaycast -= TryAddTask;
-            InternalPhysicsCast.OnSphereOverlap -= AddTask;
-            InternalPhysicsCast.OnBoxOverlap -= AddTask;
+            InternalPhysicsCast.OnSpherecast -= TryAddTask;
+            InternalPhysicsCast.OnBoxcast += TryAddTask;
+            InternalPhysicsCast.OnSphereOverlap -= TryAddTask;
+            InternalPhysicsCast.OnBoxOverlap -= TryAddTask;
         }
 
         private void OnDrawGizmos()
@@ -78,44 +82,6 @@ namespace SimpleMan.VisualRaycast.Presentation
             }
         }
 
-        private void AddTask(RaycastInfo info)
-        {
-            DrawTask task;
-            switch (info.castType)
-            {
-                case RaycastInfo.ECastType.Raycast:
-                    if (info.isSingle)
-                    {
-                        task = new RaycastSingleDrawTask(
-                        info.from,
-                        info.direction,
-                        info.distance,
-                        GizmoLifeTime,
-                        HitPointRadius,
-                        HitColor,
-                        MissColor,
-                        info.result); break;
-                    }
-                    else
-                    {
-                        task = new RaycastMultiDrawTask(
-                        info.from,
-                        info.direction,
-                        info.distance,
-                        GizmoLifeTime,
-                        HitPointRadius,
-                        HitColor,
-                        MissColor,
-                        info.result); break;
-                    }
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            _drawTasks.Add(task);
-        }
-
         private void TryAddTask(RaycastInfo info)
         {
             RemoveOldTaskIfNeed();
@@ -127,6 +93,160 @@ namespace SimpleMan.VisualRaycast.Presentation
                 if (difference < 1)
                     _drawTasks.RemoveAt(0);
             }
+        }
+
+        private void TryAddTask(SpherecastInfo info)
+        {
+            RemoveOldTaskIfNeed();
+            AddTask(info);
+
+            void RemoveOldTaskIfNeed()
+            {
+                int difference = _drawTasks.Capacity - _drawTasks.Count;
+                if (difference < 1)
+                    _drawTasks.RemoveAt(0);
+            }
+        }
+
+        private void TryAddTask(SphereOverlapInfo info)
+        {
+            RemoveOldTaskIfNeed();
+            AddTask(info);
+
+            void RemoveOldTaskIfNeed()
+            {
+                int difference = _drawTasks.Capacity - _drawTasks.Count;
+                if (difference < 1)
+                    _drawTasks.RemoveAt(0);
+            }
+        }
+
+        private void TryAddTask(BoxcastInfo info)
+        {
+            RemoveOldTaskIfNeed();
+            AddTask(info);
+
+            void RemoveOldTaskIfNeed()
+            {
+                int difference = _drawTasks.Capacity - _drawTasks.Count;
+                if (difference < 1)
+                    _drawTasks.RemoveAt(0);
+            }
+        }
+
+        private void TryAddTask(BoxOverlapInfo info)
+        {
+            RemoveOldTaskIfNeed();
+            AddTask(info);
+
+            void RemoveOldTaskIfNeed()
+            {
+                int difference = _drawTasks.Capacity - _drawTasks.Count;
+                if (difference < 1)
+                    _drawTasks.RemoveAt(0);
+            }
+        }
+
+        private void AddTask(RaycastInfo info)
+        {
+            DrawTask task;
+
+            if (info.isSingle)
+            {
+                task = new RaycastSingleDrawTask(
+                info.from,
+                info.direction,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+            else
+            {
+                task = new RaycastMultiDrawTask(
+                info.from,
+                info.direction,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+
+            _drawTasks.Add(task);
+        }
+
+        private void AddTask(SpherecastInfo info)
+        {
+            DrawTask task;
+
+            if (info.isSingle)
+            {
+                task = new SpherecastSingleDrawTask(
+                info.from,
+                info.direction,
+                info.radius,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+            else
+            {
+                task = new SpherecastMultiDrawTask(
+                info.from,
+                info.direction,
+                info.radius,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+
+            _drawTasks.Add(task);
+        }
+
+        private void AddTask(BoxcastInfo info)
+        {
+            DrawTask task;
+
+            if (info.isSingle)
+            {
+                task = new BoxcastSingleDrawTask(
+                info.from,
+                info.direction,
+                info.size,
+                info.orientation,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+            else
+            {
+                task = new BoxcastMultiDrawTask(
+                info.from,
+                info.direction,
+                info.size,
+                info.orientation,
+                info.distance,
+                GizmoLifeTime,
+                HitPointRadius,
+                HitColor,
+                MissColor,
+                info.result);
+            }
+
+            _drawTasks.Add(task);
         }
 
         private void AddTask(SphereOverlapInfo info)
@@ -142,7 +262,7 @@ namespace SimpleMan.VisualRaycast.Presentation
 
             _drawTasks.Add(task);
         }
-
+        
         private void AddTask(BoxOverlapInfo info)
         {
             DrawTask task = new BoxOverlapDrawTask(

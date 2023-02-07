@@ -28,7 +28,7 @@ namespace SimpleMan.VisualRaycast.Presentation
 
         protected void OrderHitsByDistance(RaycastHit[] hits)
         {
-            hits.OrderBy(x => Vector3.Distance(_from, x.point));
+            hits = hits.OrderBy(x => Vector3.Distance(_from, x.point)).ToArray();
         }
     }
 }

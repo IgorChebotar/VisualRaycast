@@ -18,6 +18,24 @@ namespace SimpleMan.VisualRaycast
         }
 
         /// <summary>
+        /// Example: PhysicsCast->Spherecast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
+        /// </summary>
+        /// <returns></returns>
+        public static SpherecastDeclaration SphereCast()
+        {
+            return new SpherecastDeclaration();
+        }
+
+        /// <summary>
+        /// Example: PhysicsCast->Boxcast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
+        /// </summary>
+        /// <returns></returns>
+        public static BoxcastDeclaration BoxCast()
+        {
+            return new BoxcastDeclaration();
+        }
+
+        /// <summary>
         /// Example: PhysicsCast->SphereOverlap->FromGameObjectInWorld->WithRadius->UseCustomLayerMask->IgnoreObjects
         /// </summary>
         /// <returns></returns>
@@ -57,6 +75,54 @@ namespace SimpleMan.VisualRaycast
         }
 
         /// <summary>
+        /// Performs a classic spherecast using the specified parameters.
+        /// </summary>
+        /// <param name="from">The starting position of the raycast.</param>
+        /// <param name="direction">The direction of the raycast.</param>
+        /// <param name="radius">The radius of the sphere.</param>
+        /// <param name="distance">The maximum distance of the raycast.</param>
+        /// <param name="singleCast">If true, only the first object hit by the raycast will be returned. If false, all objects hit by the raycast will be returned.</param>
+        /// <param name="collidersToIgnore">An array of colliders to ignore during the raycast.</param>
+        /// <param name="layerMask">A mask used to filter which objects the raycast will hit.</param>
+        /// <returns>A PhysicsCastResult instance containing information about the objects hit by the raycast.</returns>
+        public static PhysicsCastResult ClassicSpherecast(
+           Vector3 from,
+           Vector3 direction,
+           float radius,
+           float distance,
+           bool singleCast,
+           Collider[] collidersToIgnore,
+           LayerMask layerMask)
+        {
+            return InternalPhysicsCast.Spherecast(from, direction, distance, radius, singleCast, collidersToIgnore, layerMask);
+        }
+
+        /// <summary>
+        /// Performs a classic boxcast using the specified parameters.
+        /// </summary>
+        /// <param name="from">The starting position of the raycast.</param>
+        /// <param name="direction">The direction of the raycast.</param>
+        /// <param name="size">The size of the box.</param>
+        /// <param name="orientation">The orientation of the box.</param>
+        /// <param name="distance">The maximum distance of the raycast.</param>
+        /// <param name="singleCast">If true, only the first object hit by the raycast will be returned. If false, all objects hit by the raycast will be returned.</param>
+        /// <param name="collidersToIgnore">An array of colliders to ignore during the raycast.</param>
+        /// <param name="layerMask">A mask used to filter which objects the raycast will hit.</param>
+        /// <returns>A PhysicsCastResult instance containing information about the objects hit by the raycast.</returns>
+        public static PhysicsCastResult ClassicSpherecast(
+           Vector3 from,
+           Vector3 direction,
+           Vector3 size,
+           Quaternion orientation,
+           float distance,
+           bool singleCast,
+           Collider[] collidersToIgnore,
+           LayerMask layerMask)
+        {
+            return InternalPhysicsCast.Boxcast(from, direction, size, orientation, distance, singleCast, collidersToIgnore, layerMask);
+        }
+
+        /// <summary>
         /// Performs a classic 3D sphere overlap using the specified parameters.
         /// </summary>
         /// <param name="from">The center position of the sphere.</param>
@@ -91,7 +157,6 @@ namespace SimpleMan.VisualRaycast
         {
             return InternalPhysicsCast.BoxOverlap(from, size, rotation, mask, collidersToIgnore);
         }
-        
     }
 }
 

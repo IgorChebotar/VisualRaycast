@@ -29,7 +29,7 @@ namespace SimpleMan.VisualRaycast.Presentation
         public override void Draw()
         {
             Color color = _result ? _hitColor : _missColor;
-            ComplexGizmos.DrawBoxOLD(_from, _size, _rotation, color);
+            ComplexGizmos.DrawBox(_from, _size, _rotation, color);
 
             if (!_result)
                 return;
