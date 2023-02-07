@@ -23,8 +23,8 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualPhysicsAPI.
-                BoxCast().
+                this.
+                Boxcast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).
                 SingleHit().

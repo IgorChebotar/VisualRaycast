@@ -19,10 +19,10 @@ namespace SimpleMan.VisualRaycastDemo
         {
             this.RepeatForever(Tick, _raycastFrequency);
         }
-
+        
         private void Tick()
         {
-            VisualPhysicsAPI.
+            this.
                 SphereOverlap().
                 FromGameObjectInWorld(gameObject).
                 WithRadius(_radius).

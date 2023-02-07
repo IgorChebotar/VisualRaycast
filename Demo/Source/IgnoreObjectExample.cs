@@ -18,7 +18,7 @@ namespace SimpleMan.VisualRaycastDemo
                 return;
 
             //Make raycast
-            var result = VisualPhysicsAPI.
+            var result = this.
                 Raycast().
                 FromMainCamera().
                 ToMousePositionInWorld().

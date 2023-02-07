@@ -46,12 +46,18 @@ namespace SimpleMan.VisualRaycast.Editor
         {
             var serializedConfig = new SerializedObject(config);
 
+            treeInstance.Q<Button>("DocumentionButton").clicked += DocumentationButtonckClicked;
             treeInstance.Q<SliderInt>("MaxDrawTasksCount").bindingPath = "_maxDrawTasksCount";
             treeInstance.Q<Slider>("GizmoLifeTime").bindingPath = "_gizmoLifeTime";
             treeInstance.Q<Slider>("HitPointRadius").bindingPath = "_hitPointRadius";
             treeInstance.Q<ColorField>("HitColor").bindingPath = "_hitColor";
             treeInstance.Q<ColorField>("MissColor").bindingPath = "_missColor";
             treeInstance.Bind(serializedConfig);
+        }
+
+        private static void DocumentationButtonckClicked()
+        {
+            Application.OpenURL(Constants.DOCUMENTATION_URL);
         }
 
         private static TemplateContainer GetVisualTreeInstance()

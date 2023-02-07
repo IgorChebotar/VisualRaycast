@@ -9,7 +9,7 @@ namespace SimpleMan.VisualRaycast
     public static class VisualPhysicsAPI
     {
         /// <summary>
-        /// Example: PhysicsCast->Raycast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
+        /// Example: Raycast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
         /// </summary>
         /// <returns></returns>
         public static RaycastDeclaration Raycast()
@@ -18,25 +18,25 @@ namespace SimpleMan.VisualRaycast
         }
 
         /// <summary>
-        /// Example: PhysicsCast->Spherecast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
+        /// Example: Spherecast->FromMainCamera->ToMousePositionInWorld->SingleHit->UseCustomLayerMask->IgnoreObjects
         /// </summary>
         /// <returns></returns>
-        public static SpherecastDeclaration SphereCast()
+        public static SpherecastDeclaration Spherecast()
         {
             return new SpherecastDeclaration();
         }
 
         /// <summary>
-        /// Example: PhysicsCast->Boxcast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects
+        /// Example: Boxcast->FromMainCamera->ToMousePositionInWorld->SingleHit->UseCustomLayerMask->IgnoreObjects
         /// </summary>
         /// <returns></returns>
-        public static BoxcastDeclaration BoxCast()
+        public static BoxcastDeclaration Boxcast()
         {
             return new BoxcastDeclaration();
         }
 
         /// <summary>
-        /// Example: PhysicsCast->SphereOverlap->FromGameObjectInWorld->WithRadius->UseCustomLayerMask->IgnoreObjects
+        /// Example: SphereOverlap->FromGameObjectInWorld->WithRadius->UseCustomLayerMask->IgnoreObjects
         /// </summary>
         /// <returns></returns>
         public static SphereOverlapDeclaration SphereOverlap()
@@ -45,7 +45,7 @@ namespace SimpleMan.VisualRaycast
         }
 
         /// <summary>
-        /// Example: PhysicsCast->BoxOverlap->FromGameObjectInWorld->WithSize->UseCustomLayerMask->UseRotationFrom->IgnoreObjects
+        /// Example: PhysicsCast->BoxOverlap->FromGameObjectInWorld->WithSize->WithRotation->UseCustomLayerMask->UseRotationFrom->IgnoreObjects
         /// </summary>
         /// <returns></returns>
         public static BoxOverlapDeclaration BoxOverlap()

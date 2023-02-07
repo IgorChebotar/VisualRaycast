@@ -21,12 +21,12 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualPhysicsAPI.
-                BoxOverlap().
-                FromGameObjectInWorld(gameObject).
-                WithSize(_size).
-                WithRotationOf(gameObject).
-                ContinueWithDefaultParams();
+            this.
+            BoxOverlap().
+            FromGameObjectInWorld(gameObject).
+            WithSize(_size).
+            WithRotationOf(gameObject).
+            ContinueWithDefaultParams();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualPhysicsAPI.
+            this.
                 Raycast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).

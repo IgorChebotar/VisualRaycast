@@ -1,4 +1,5 @@
 ﻿using SimpleMan.AsyncOperations;
+using SimpleMan.VisualRaycast;
 using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
@@ -21,11 +22,11 @@ namespace SimpleMan.VisualRaycastDemo
         {
             this.RepeatForever(Tick, _raycastFrequency);
         }
-
+        
         private void Tick()
         {
-            VisualRaycast.VisualPhysicsAPI.
-                SphereCast().
+            this.
+                Spherecast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).
                 MultiHit().

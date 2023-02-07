@@ -29,7 +29,6 @@ namespace SimpleMan.VisualRaycast
 
 
 
-
         public int MaxDrawTasksCount
         {
             get => _maxDrawTasksCount;

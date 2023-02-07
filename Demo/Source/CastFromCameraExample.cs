@@ -15,13 +15,26 @@ namespace SimpleMan.VisualRaycastDemo
             if (!Input.GetMouseButtonDown(0))
                 return;
 
-            //Make raycast
-            var result = VisualPhysicsAPI.
-                Raycast().
-                FromMainCamera().
-                ToMousePositionInWorld().
-                ContinueWithDefaultParams();
 
+            
+            //Declarate raycast operation and request to get result of it
+            var result = this.
+
+            //Type of operation
+            Raycast().
+
+            //Origin of ray is main camera
+            FromMainCamera().
+
+            //Direction is mouse position in world
+            ToMousePositionInWorld().
+
+            //The parameters of the operation (could be extended)
+            ContinueWithDefaultParams();
+
+
+
+            
             //No hits? -> Ignore next code
             if (!result)
                 return;

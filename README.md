@@ -1,63 +1,179 @@
 # Visual raycast [Download](https://github.com/IgorChebotar/VisualRaycast/releases)
-Raycast utilities and visualizer for Unity (all raycast types supported). Not required any additional components or interfaces on your objects. No conflicts with the standard unity raycast.
- 
+Raycast utilities and visualizer for Unity. Not required any additional components or interfaces on your objects. No conflicts with the standard unity raycast.
 
-**Author:** Igor-Valerii Chebotar
+
+**Author:** [Igor-Valerii Chebotar](https://www.linkedin.com/in/igor-chebotar/)
+<br>
 **Email:**  igor.valerii.chebotar@gmail.com
 
 
 ## Requirements
+* [Simple Man - AsyncOperations](https://github.com/IgorChebotar/Utilities/releases)
 * [Simple Man - Utilities](https://github.com/IgorChebotar/Utilities/releases)
 
 
 ## How to install plugin?
-Open installer by the click on Tools -> Simple Man -> Master Installer -> [Plugins' name] -> Click 'Install' button. If you don't have one or more of the plugins this plugin depends on, you must install it first.
+Open installer by the click on Tools -> Simple Man -> Main Installer -> [Plugins' name] -> Click 'Install' button. If you don't have one or more of the plugins this plugin depends on, you must install it first.
 
 ## Quick start
-1. Add 'Raycast drawer' game object on your scene by right click inside the 'Hierarchy' window and select 'Raycast Drawer' option.
-2. Open your C# class that calls '_Phisics.Raycast_' function (or create new C# MonoBehavior class) and add a _'using SimpleMan.VisualRaycast'_ line.
-3. Replace standart raycast call on '_Phisics.Raycast_' line on _'this.Raycast'_. See example below:
+1. Add 'VisualRaycastDrawer' game object on your scene by right click inside the 'Hierarchy' window and select 'Visual Raycast Drawer' option.
+2. Add the namespace `SimpleMan.VisualRaycast`.
+3. Copy the code below into `Update` method in your class.
 
+```
+this.
+Raycast().
+FromGameObjectInWorld(gameObject).
+ToDirection(transform.forward).
+ContinueWithDefaultParams();
+```
+
+4. Your C# class must be similar to:
 ```C#
-using UnityEngine;
+using SimpleMan.AsyncOperations;
 using SimpleMan.VisualRaycast;
+using UnityEngine;
 
-public class SomeClass : MonoBehaviour
+public class RaycastExample : MonoBehaviour
 {
-    private void Update()
-    {
-        //BEFORE:
-        if(Physics.Raycast(transform.position, transform.forward))
-        {
-            //Do some action
-        }
-        
-        //AFTER:
-        if(this.Raycast(transform.position, transform.forward))
-        {
-            //Do some action
-        }
-    }
+	private void Update()
+	{
+            //The entry point - your class. You can aslo use 'VisualRaycastAPI' instead of 'this'
+            this.
+                
+            //The type of the operation
+            Raycast().
+
+            //The origin of the raycast - this game object
+            FromGameObjectInWorld(gameObject).  
+            
+            //The direction of the raycast - forward direction of this game object
+            ToDirection(transform.forward).   
+            
+            //The parameters of the operation (could be extended)
+            ContinueWithDefaultParams();                
+	}
 }
 ```
-4. Done! 
-All examples you also can find in 'Demo' package.
+5. Done! 
+All examples you also can find in the 'Demo' folder.
 
-## Using box and sphere casts
-1. Follow the above written steps
-2. Use '_this.Spherecast_' or '_this.Boxcast_' instead of _'this.Raycast'_. 
-3. Done! 
+## Raycasts from camera
+The next code demonstrates how you can make raycast from the main camera.
+```C#
+//Declarate raycast operation and request to get result of it
+var result = this.
 
-## Using box and sphere overlap functions
-1. Follow the above written steps
-2. Use '_this.SphereOverlap_' or '_this.BoxOverlap'_. 
-3. Done! 
+//Type of operation
+Raycast().
+
+//Origin of ray is main camera
+FromMainCamera().
+
+//Direction is mouse position in world
+ToMousePositionInWorld().
+
+//The parameters of the operation (could be extended)
+ContinueWithDefaultParams();
+```
+
+## How to ger result of operation?
+Each cast operation returns `PhysicsCastResult`. 
+Example:
+
+```C#
+//Getting result
+var result = this.
+	Raycast().
+	FromGameObjectInWorld(gameObject).  
+	ToDirection(transform.forward).   
+	ContinueWithDefaultParams();
+    
+//Hit check: returns 'true' if at least one hit was detected
+if(result)
+{
+    //Get all hits:
+    foreach(var hit in result.hits)
+    	Debug.Log("Detected object: " + hit.collider.name);
+}
+```
+
+
+
+## Using custom parameters
+This was a simple exable above. Here is an extended:
+```C#
+//The entry point - your class. You can aslo use 'VisualRaycastAPI' instead of 'this'
+this.
+                
+//The type of the operation
+Raycast().
+
+//The origin of the raycast
+FromGameObjectInWorld(gameObject).  
+            
+//The direction of the raycast
+ToDirection(transform.forward).   
+            
+//Single is analogue of simple 'Physics.Raycast' and Multi is analogue of 'Physics.RaycastAll'.
+SingleHit().
+
+//Ignore all layers except 9
+UseCustomLayerMask(1 << 9).
+
+//Ignore this game object
+IgnoreObjects(gameObject);
+```
+
+## Spherecast and boxcast
+You can use this operations the same way as 'Raycast'. Example:
+```C#
+//Spherecast
+this.
+    Spherecast().
+    FromGameObjectInWorld(gameObject).
+    ToDirection(transform.forward).
+    SingleHit().
+    WithRadius(_radius).
+    WithDistance(_distance).
+    ContinueWithDefaultParams();
+
+//Boxcast
+this.
+	Boxcast().
+	FromGameObjectInWorld(gameObject).
+	ToDirection(transform.forward).
+	SingleHit().
+	WithSize(_size).
+	WithRotationOf(gameObject).
+	WithDistance(_distance).
+	ContinueWithDefaultParams();
+```
+
+## Sphere and box overlap
+Plugin supports this operations. You can call them by similar way as previous. Example:
+```C#
+//Sphere overlap
+this.
+    SphereOverlap().
+    FromGameObjectInWorld(gameObject).
+    WithRadius(_radius).
+    ContinueWithDefaultParams();
+  
+//Box overlap
+this.
+    BoxOverlap().
+    FromGameObjectInWorld(gameObject).
+    WithSize(_size).
+    WithRotationOf(gameObject).
+    ContinueWithDefaultParams();
+```
 
 ## Can I use layer masks and other standard raycast arguments?
-Sure! Visual raycast has all arguments of classic raycast. Also it has '_ignoreSelf_' parameter. It switched on by default. Switch it off, if your caster game object needs to cast itself.
+Sure! Visual raycast has all arguments of classic raycast. Also it has `IgnoreGameObjects` parameter. Use it if you need to ignore concrete game objects.
 
 
-## Extension functions for the 'Component'
+## Extension functions for the 'MonoBehaviour'
 You can use this functions from each of your MonoBehavior classes. **Don't forget to write _'this.'_ keyword to use exension functions.** 
 
 #### Methods
@@ -69,16 +185,14 @@ You can use this functions from each of your MonoBehavior classes. **Don't forge
 | BoxOverlap |Check the area by box|
 | SphereOverlap |Check the area by sphere|
 
-## Visual raycast drawer component
-Handles visualization of raycast operations
+You can also use `VisualRaycastAPI` to use the same functions in non-monobehaviour classes. They could be visualized too, of course. 
 
-#### Properties
-| Property name | Description                    |
-| ------------- | ------------------------------ |
-| Instance |Static property with current class instance|
-| FadeTime |Visualization lifetime|
-| HitIndicatorScale |Scale of hit indicators (small spheres)|
-| HitColor |Color of casts, that hit something|
-| NoHitColor |Color of casts, that hit not anything|
+## Visual raycast drawer component
+This is mono class that draws the gizmos. You can delete it from scene, if you don't need visualization of physics processes. right click inside the 'Hierarchy' window and select 'Visual Raycast Drawer' option to add this object again.
+
+## Config and global settings
+You can change color of the gizmos, hit poins size and other settings in project settings tab, that can be found by path:
+Project settings -> Visual raycast
+
 
 
