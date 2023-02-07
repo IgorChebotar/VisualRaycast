@@ -6,7 +6,7 @@ namespace SimpleMan.VisualRaycast
     /// Contains methods for performing and visualizing physics casting operations in Unity, 
     /// such as raycasting, sphere overlap, and box overlap.
     /// </summary>
-    public static class VisualPhysics
+    public static class VisualPhysicsAPI
     {
         /// <summary>
         /// Example: PhysicsCast->Raycast->FromMainCamera->ToMousePositionInWorld->Single->UseCustomLayerMask->IgnoreObjects

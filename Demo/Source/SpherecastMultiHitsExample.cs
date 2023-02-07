@@ -24,7 +24,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualRaycast.VisualPhysics.
+            VisualRaycast.VisualPhysicsAPI.
                 SphereCast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).

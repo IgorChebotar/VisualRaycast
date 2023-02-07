@@ -21,7 +21,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualPhysics.
+            VisualPhysicsAPI.
                 BoxOverlap().
                 FromGameObjectInWorld(gameObject).
                 WithSize(_size).

@@ -22,7 +22,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualPhysics.
+            VisualPhysicsAPI.
                 SphereOverlap().
                 FromGameObjectInWorld(gameObject).
                 WithRadius(_radius).

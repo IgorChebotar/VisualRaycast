@@ -7,26 +7,26 @@ namespace SimpleMan.VisualRaycast
 {
     public struct RaycastDeclaration
     {
-        public struct FromData
+        public struct SetDirectionFromWorld
         {
             internal readonly Vector3 from;
 
-            public FromData(Vector3 from)
+            public SetDirectionFromWorld(Vector3 from)
             {
                 this.from = from;
             }
 
-            public ToData ToDirection(Vector3 direction, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToDirection(Vector3 direction, float castDistance = float.PositiveInfinity)
             {
-                return new ToData(from, direction, castDistance);
+                return new SetHitMode(from, direction, castDistance);
             }
 
-            public ToData ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
             {
-                return new ToData(from, point - from, castDistance);
+                return new SetHitMode(from, point - from, castDistance);
             }
 
-            public ToData ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
             {
                 if (point.NotExist())
                 {
@@ -36,17 +36,17 @@ namespace SimpleMan.VisualRaycast
                 return ToPointInWorld(point.position, castDistance);
             }
 
-            public ToData ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
             {
                 return ToGameObjectInWorld(point.transform, castDistance);
             }
         }
 
-        public struct FromCameraData
+        public struct SetDirectionFromCamera
         {
             internal readonly Camera from;
 
-            public FromCameraData(Camera from)
+            public SetDirectionFromCamera(Camera from)
             {
                 if (from.NotExist())
                 {
@@ -55,36 +55,36 @@ namespace SimpleMan.VisualRaycast
                 this.from = from;
             }
 
-            public ToData ToForward(float castDistance = float.PositiveInfinity)
+            public SetHitMode ToForward(float castDistance = float.PositiveInfinity)
             {
-                return new ToData(
+                return new SetHitMode(
                     from.transform.position,
                     from.transform.forward,
                     castDistance.ClampPositive());
             }
 
-            public ToData ToMousePositionInWorld(float castDistance = float.PositiveInfinity)
+            public SetHitMode ToMousePositionInWorld(float castDistance = float.PositiveInfinity)
             {
                 Ray ray = from.ScreenPointToRay(Input.mousePosition);
 
-                return new ToData(
+                return new SetHitMode(
                     ray.origin,
                     ray.direction,
                     castDistance.ClampPositive());
             }
 
-            public ToData ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
             {
                 Vector3 cameraPosition = from.transform.position;
                 Vector3 direction = point - cameraPosition;
 
-                return new ToData(
+                return new SetHitMode(
                     cameraPosition,
                     direction,
                     castDistance.ClampPositive());
             }
 
-            public ToData ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
             {
                 if (point.NotExist())
                 {
@@ -94,17 +94,17 @@ namespace SimpleMan.VisualRaycast
                 return ToPointInWorld(point.position, castDistance);
             }
 
-            public ToData ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
             {
                 return ToGameObjectInWorld(point.transform, castDistance);
             }
         }
 
-        public struct ToData
+        public struct SetHitMode
         {
-            public struct ComplexityData
+            public struct SetLayer
             {
-                public struct LayerMaskData
+                public struct SetIgnoredColliders
                 {
                     internal readonly Vector3 from;
                     internal readonly Vector3 direction;
@@ -112,7 +112,7 @@ namespace SimpleMan.VisualRaycast
                     internal readonly bool singleHit;
                     internal readonly LayerMask mask;
 
-                    public LayerMaskData(
+                    public SetIgnoredColliders(
                         Vector3 from,
                         Vector3 direction,
                         float distance,
@@ -184,7 +184,7 @@ namespace SimpleMan.VisualRaycast
                 internal readonly float distance;
                 internal readonly bool singleHit;
 
-                public ComplexityData(
+                public SetLayer(
                         Vector3 from,
                         Vector3 direction,
                         float distance,
@@ -198,24 +198,24 @@ namespace SimpleMan.VisualRaycast
 
                 public PhysicsCastResult ContinueWithDefaultParams()
                 {
-                    LayerMaskData layerMaskData = new LayerMaskData(
+                    SetIgnoredColliders layerMaskData = new SetIgnoredColliders(
                         from,
                         direction,
                         distance,
                         singleHit,
-                        UnityEngine.Physics.DefaultRaycastLayers);
+                        Physics.DefaultRaycastLayers);
 
                     return layerMaskData.DontIgnoreAnything();
                 }
 
-                public LayerMaskData UseDefaultLayerMask()
+                public SetIgnoredColliders UseDefaultLayerMask()
                 {
                     return UseCustomLayerMask(UnityEngine.Physics.DefaultRaycastLayers);
                 }
 
-                public LayerMaskData UseCustomLayerMask(LayerMask mask)
+                public SetIgnoredColliders UseCustomLayerMask(LayerMask mask)
                 {
-                    return new LayerMaskData(
+                    return new SetIgnoredColliders(
                         from,
                         direction,
                         distance,
@@ -232,7 +232,7 @@ namespace SimpleMan.VisualRaycast
 
 
 
-            public ToData(
+            public SetHitMode(
                 Vector3 from,
                 Vector3 direction,
                 float distance)
@@ -244,7 +244,7 @@ namespace SimpleMan.VisualRaycast
 
             public PhysicsCastResult ContinueWithDefaultParams()
             {
-                ComplexityData complexityData = new ComplexityData(
+                SetLayer complexityData = new SetLayer(
                     from,
                     direction,
                     distance,
@@ -253,18 +253,18 @@ namespace SimpleMan.VisualRaycast
                 return complexityData.ContinueWithDefaultParams();
             }
 
-            public ComplexityData Single()
+            public SetLayer Single()
             {
-                return new ComplexityData(
+                return new SetLayer(
                     from,
                     direction,
                     distance,
                     true);
             }
 
-            public ComplexityData MultiHits()
+            public SetLayer MultiHits()
             {
-                return new ComplexityData(
+                return new SetLayer(
                     from,
                     direction,
                     distance,
@@ -272,27 +272,27 @@ namespace SimpleMan.VisualRaycast
             }
         }
 
-        public FromCameraData FromMainCamera()
+        public SetDirectionFromCamera FromMainCamera()
         {
-            return new FromCameraData(Camera.main);
+            return new SetDirectionFromCamera(Camera.main);
         }
 
-        public FromCameraData FromCamera(Camera point)
+        public SetDirectionFromCamera FromCamera(Camera point)
         {
             if (point.NotExist())
             {
                 throw new ArgumentNullException(nameof(point));
             }
 
-            return new FromCameraData(point);
+            return new SetDirectionFromCamera(point);
         }
 
-        public FromData FromPointInWorld(Vector3 point)
+        public SetDirectionFromWorld FromPointInWorld(Vector3 point)
         {
-            return new FromData(point);
+            return new SetDirectionFromWorld(point);
         }
 
-        public FromData FromGameObjectInWorld(Transform point)
+        public SetDirectionFromWorld FromGameObjectInWorld(Transform point)
         {
             if (point.NotExist())
             {
@@ -302,7 +302,7 @@ namespace SimpleMan.VisualRaycast
             return FromPointInWorld(point.position);
         }
 
-        public FromData FromGameObjectInWorld(GameObject point)
+        public SetDirectionFromWorld FromGameObjectInWorld(GameObject point)
         {
             return FromGameObjectInWorld(point.transform);
         }

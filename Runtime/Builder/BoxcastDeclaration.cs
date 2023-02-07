@@ -262,7 +262,7 @@ namespace SimpleMan.VisualRaycast
                             this.singleHit = singleHit;
                         }
 
-                        public PhysicsCastResult ContinueWithDefaultParameters()
+                        public PhysicsCastResult ContinueWithDefaultParams()
                         {
                             return WithMaxDistace().ContinueWithDefaultParams();
                         }
@@ -305,9 +305,9 @@ namespace SimpleMan.VisualRaycast
                         this.singleHit = singleHit;
                     }
 
-                    public PhysicsCastResult ContinueWithDefaultParamters()
+                    public PhysicsCastResult ContinueWithDefaultParams()
                     {
-                        return WithDefaultRotation().ContinueWithDefaultParameters();
+                        return WithDefaultRotation().ContinueWithDefaultParams();
                     }
 
                     public SetMaxDistance WithDefaultRotation()
@@ -399,6 +399,11 @@ namespace SimpleMan.VisualRaycast
                     this.singleHit = singleHit;
                 }
 
+                public PhysicsCastResult ContinueWithDefaultParams()
+                {
+                    return WithSize(Vector3.one).ContinueWithDefaultParams();
+                }
+
                 public SetOrientation WithSize(Vector3 size)
                 {
                     return new SetOrientation(
@@ -420,6 +425,11 @@ namespace SimpleMan.VisualRaycast
                 this.direction = direction;
             }
 
+            public PhysicsCastResult ContinueWithDefaultParams()
+            {
+                return SingleHit().ContinueWithDefaultParams();
+            }
+
             public SetSize SingleHit()
             {
                 return new SetSize(originPoint, direction, true);
@@ -431,6 +441,7 @@ namespace SimpleMan.VisualRaycast
             }
         }
 
+        
         
 
         public SetDirectionFromCamera FromMainCamera()

@@ -6323,7 +6323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acf5f1456c6e13947b2970bc182fa1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastFrequency: 0.6
+  _raycastFrequency: 0.05
 --- !u!114 &7497194664294941665
 MonoBehaviour:
   m_ObjectHideFlags: 0

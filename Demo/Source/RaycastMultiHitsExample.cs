@@ -1,4 +1,5 @@
 ﻿using SimpleMan.AsyncOperations;
+using SimpleMan.VisualRaycast;
 using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
@@ -15,7 +16,7 @@ namespace SimpleMan.VisualRaycastDemo
 
         private void Tick()
         {
-            VisualRaycast.VisualPhysics.
+            VisualPhysicsAPI.
                 Raycast().
                 FromGameObjectInWorld(gameObject).
                 ToDirection(transform.forward).

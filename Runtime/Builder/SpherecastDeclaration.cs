@@ -249,7 +249,7 @@ namespace SimpleMan.VisualRaycast
                         this.singleHit = singleHit;
                     }
 
-                    public PhysicsCastResult ContinueWithDefaultParameters()
+                    public PhysicsCastResult ContinueWithDefaultParams()
                     {
                         return WithMaxDistace().ContinueWithDefaultParams();
                     }
@@ -288,6 +288,11 @@ namespace SimpleMan.VisualRaycast
                     this.singleHit = singleHit;
                 }
 
+                public PhysicsCastResult ContinueWithDefaultParams()
+                {
+                    return WithRadius(0.5f).ContinueWithDefaultParams();
+                }
+
                 public SetMaxDistance WithRadius(float radius)
                 {
                     return new SetMaxDistance(originPoint, direction, radius, singleHit);
@@ -303,6 +308,11 @@ namespace SimpleMan.VisualRaycast
             {
                 this.originPoint = originPoint;
                 this.direction = direction;
+            }
+
+            public PhysicsCastResult ContinueWithDefaultParams()
+            {
+                return SingleHit().ContinueWithDefaultParams();
             }
 
             public SetRadius SingleHit()
