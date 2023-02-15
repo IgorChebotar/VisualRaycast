@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     internal class RaycastMultiDrawTask : CastDrawTask
     {
@@ -36,7 +36,7 @@ namespace SimpleMan.VisualRaycast.Presentation
             RaycastHit lastHit = _castResult.hits.Last();
             foreach (var hit in _castResult.hits)
             {
-                ComplexGizmos.DrawHitSphere(hit.point, _hitPointRadius, _hitColor);
+                ComplexGizmos.DrawSphere(hit.point, _hitPointRadius, _hitColor);
             }
             
             ComplexGizmos.DrawRay(_from, _direction, lastHit.distance, _hitColor);

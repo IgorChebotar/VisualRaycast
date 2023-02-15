@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisibleRaycast
 {
     public struct RaycastDeclaration
     {
@@ -16,29 +16,29 @@ namespace SimpleMan.VisualRaycast
                 this.from = from;
             }
 
-            public SetHitMode ToDirection(Vector3 direction, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToDirection(Vector3 direction)
             {
-                return new SetHitMode(from, direction, castDistance);
+                return new SetHitMode(from, direction);
             }
 
-            public SetHitMode ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToPointInWorld(Vector3 point)
             {
-                return new SetHitMode(from, point - from, castDistance);
+                return new SetHitMode(from, point - from);
             }
 
-            public SetHitMode ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(Transform point)
             {
                 if (point.NotExist())
                 {
                     throw new ArgumentNullException(nameof(point));
                 }
 
-                return ToPointInWorld(point.position, castDistance);
+                return ToPointInWorld(point.position);
             }
 
-            public SetHitMode ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(GameObject point)
             {
-                return ToGameObjectInWorld(point.transform, castDistance);
+                return ToGameObjectInWorld(point.transform);
             }
         }
 
@@ -55,178 +55,207 @@ namespace SimpleMan.VisualRaycast
                 this.from = from;
             }
 
-            public SetHitMode ToForward(float castDistance = float.PositiveInfinity)
+            public SetHitMode ToForward()
             {
                 return new SetHitMode(
                     from.transform.position,
-                    from.transform.forward,
-                    castDistance.ClampPositive());
+                    from.transform.forward);
             }
 
-            public SetHitMode ToMousePositionInWorld(float castDistance = float.PositiveInfinity)
+            public SetHitMode ToMousePositionInWorld()
             {
                 Ray ray = from.ScreenPointToRay(Input.mousePosition);
 
                 return new SetHitMode(
                     ray.origin,
-                    ray.direction,
-                    castDistance.ClampPositive());
+                    ray.direction);
             }
 
-            public SetHitMode ToPointInWorld(Vector3 point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToPointInWorld(Vector3 point)
             {
                 Vector3 cameraPosition = from.transform.position;
                 Vector3 direction = point - cameraPosition;
 
                 return new SetHitMode(
                     cameraPosition,
-                    direction,
-                    castDistance.ClampPositive());
+                    direction);
             }
 
-            public SetHitMode ToGameObjectInWorld(Transform point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(Transform point)
             {
                 if (point.NotExist())
                 {
                     throw new ArgumentNullException(nameof(point));
                 }
 
-                return ToPointInWorld(point.position, castDistance);
+                return ToPointInWorld(point.position);
             }
 
-            public SetHitMode ToGameObjectInWorld(GameObject point, float castDistance = float.PositiveInfinity)
+            public SetHitMode ToGameObjectInWorld(GameObject point)
             {
-                return ToGameObjectInWorld(point.transform, castDistance);
+                return ToGameObjectInWorld(point.transform);
             }
         }
 
         public struct SetHitMode
         {
-            public struct SetLayer
+            public struct SetMaxDistance
             {
-                public struct SetIgnoredColliders
+                public struct SetLayer
                 {
+                    public struct SetIgnoredColliders
+                    {
+                        internal readonly Vector3 from;
+                        internal readonly Vector3 direction;
+                        internal readonly float distance;
+                        internal readonly bool singleHit;
+                        internal readonly LayerMask mask;
+
+                        public SetIgnoredColliders(
+                            Vector3 from,
+                            Vector3 direction,
+                            float distance,
+                            bool singleHit,
+                            LayerMask mask)
+                        {
+                            this.from = from;
+                            this.direction = direction;
+                            this.distance = distance;
+                            this.singleHit = singleHit;
+                            this.mask = mask;
+                        }
+
+                        public PhysicsCastResult DontIgnoreAnything()
+                        {
+                            return InternalPhysicsCast.Raycast(
+                                from,
+                                direction,
+                                distance,
+                                singleHit,
+                                null,
+                                mask);
+                        }
+
+                        public PhysicsCastResult IgnoreColliders(params Collider[] collidersToIgnore)
+                        {
+                            return InternalPhysicsCast.Raycast(
+                                from,
+                                direction,
+                                distance,
+                                singleHit,
+                                collidersToIgnore,
+                                mask);
+                        }
+
+                        public PhysicsCastResult IgnoreObjects(params GameObject[] objectsToIgnore)
+                        {
+                            return InternalPhysicsCast.Raycast(
+                                from,
+                                direction,
+                                distance,
+                                singleHit,
+                                GetCollidersFromObjects(objectsToIgnore),
+                                mask);
+                        }
+
+                        private Collider[] GetCollidersFromObjects(GameObject[] objectsToIgnore)
+                        {
+                            if (objectsToIgnore.NotExist() || objectsToIgnore.Length == 0)
+                                return null;
+
+                            List<Collider> collidersToIgnore = new List<Collider>(128);
+                            foreach (var gameObject in objectsToIgnore)
+                            {
+                                if (gameObject.NotExist())
+                                    continue;
+
+                                collidersToIgnore.AddRange(gameObject.GetComponentsInChildren<Collider>());
+                            }
+
+                            return collidersToIgnore.ToArray();
+                        }
+                    }
+
+
+
                     internal readonly Vector3 from;
                     internal readonly Vector3 direction;
                     internal readonly float distance;
                     internal readonly bool singleHit;
-                    internal readonly LayerMask mask;
 
-                    public SetIgnoredColliders(
-                        Vector3 from,
-                        Vector3 direction,
-                        float distance,
-                        bool singleHit,
-                        LayerMask mask)
+                    public SetLayer(
+                            Vector3 from,
+                            Vector3 direction,
+                            float distance,
+                            bool singleHit)
                     {
                         this.from = from;
                         this.direction = direction;
                         this.distance = distance;
                         this.singleHit = singleHit;
-                        this.mask = mask;
                     }
 
-                    public PhysicsCastResult DontIgnoreAnything()
+                    public PhysicsCastResult ContinueWithDefaultParams()
                     {
-                        return InternalPhysicsCast.Raycast(
+                        SetIgnoredColliders layerMaskData = new SetIgnoredColliders(
                             from,
                             direction,
                             distance,
                             singleHit,
-                            null,
-                            mask);
+                            Physics.DefaultRaycastLayers);
+
+                        return layerMaskData.DontIgnoreAnything();
                     }
 
-                    public PhysicsCastResult IgnoreColliders(params Collider[] collidersToIgnore)
+                    public SetIgnoredColliders UseDefaultLayerMask()
                     {
-                        return InternalPhysicsCast.Raycast(
+                        return UseCustomLayerMask(UnityEngine.Physics.DefaultRaycastLayers);
+                    }
+
+                    public SetIgnoredColliders UseCustomLayerMask(LayerMask mask)
+                    {
+                        return new SetIgnoredColliders(
                             from,
                             direction,
                             distance,
                             singleHit,
-                            collidersToIgnore,
                             mask);
-                    }
-
-                    public PhysicsCastResult IgnoreObjects(params GameObject[] objectsToIgnore)
-                    {
-                        return InternalPhysicsCast.Raycast(
-                            from,
-                            direction,
-                            distance,
-                            singleHit,
-                            GetCollidersFromObjects(objectsToIgnore),
-                            mask);
-                    }
-
-                    private Collider[] GetCollidersFromObjects(GameObject[] objectsToIgnore)
-                    {
-                        if (objectsToIgnore.NotExist() || objectsToIgnore.Length == 0)
-                            return null;
-
-                        List<Collider> collidersToIgnore = new List<Collider>(128);
-                        foreach (var gameObject in objectsToIgnore)
-                        {
-                            if (gameObject.NotExist())
-                                continue;
-
-                            collidersToIgnore.AddRange(gameObject.GetComponentsInChildren<Collider>());
-                        }
-
-                        return collidersToIgnore.ToArray();
                     }
                 }
+
 
 
 
                 internal readonly Vector3 from;
                 internal readonly Vector3 direction;
-                internal readonly float distance;
                 internal readonly bool singleHit;
 
-                public SetLayer(
-                        Vector3 from,
-                        Vector3 direction,
-                        float distance,
-                        bool singleHit)
+                public SetMaxDistance(Vector3 from, Vector3 direction, bool singleHit)
                 {
                     this.from = from;
                     this.direction = direction;
-                    this.distance = distance;
                     this.singleHit = singleHit;
                 }
 
                 public PhysicsCastResult ContinueWithDefaultParams()
                 {
-                    SetIgnoredColliders layerMaskData = new SetIgnoredColliders(
-                        from,
-                        direction,
-                        distance,
-                        singleHit,
-                        Physics.DefaultRaycastLayers);
-
-                    return layerMaskData.DontIgnoreAnything();
+                    return WithMaxDistance().ContinueWithDefaultParams();
                 }
 
-                public SetIgnoredColliders UseDefaultLayerMask()
+                public SetLayer WithMaxDistance()
                 {
-                    return UseCustomLayerMask(UnityEngine.Physics.DefaultRaycastLayers);
+                    return WithDistance(float.PositiveInfinity);
                 }
 
-                public SetIgnoredColliders UseCustomLayerMask(LayerMask mask)
+                public SetLayer WithDistance(float distance)
                 {
-                    return new SetIgnoredColliders(
-                        from,
-                        direction,
-                        distance,
-                        singleHit,
-                        mask);
+                    return new SetLayer(from, direction, distance, singleHit);
                 }
             }
+            
 
             internal readonly Vector3 from;
             internal readonly Vector3 direction;
-            internal readonly float distance;
 
 
 
@@ -234,40 +263,30 @@ namespace SimpleMan.VisualRaycast
 
             public SetHitMode(
                 Vector3 from,
-                Vector3 direction,
-                float distance)
+                Vector3 direction)
             {
                 this.from = from;
                 this.direction = direction;
-                this.distance = distance;
             }
 
             public PhysicsCastResult ContinueWithDefaultParams()
             {
-                SetLayer complexityData = new SetLayer(
-                    from,
-                    direction,
-                    distance,
-                    true);
-
-                return complexityData.ContinueWithDefaultParams();
+                return SingleHit().ContinueWithDefaultParams();
             }
 
-            public SetLayer SingleHit()
+            public SetMaxDistance SingleHit()
             {
-                return new SetLayer(
+                return new SetMaxDistance(
                     from,
                     direction,
-                    distance,
                     true);
             }
 
-            public SetLayer MultiHits()
+            public SetMaxDistance MultiHits()
             {
-                return new SetLayer(
+                return new SetMaxDistance(
                     from,
                     direction,
-                    distance,
                     false);
             }
         }

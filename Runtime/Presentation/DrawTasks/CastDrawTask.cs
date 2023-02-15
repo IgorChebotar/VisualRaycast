@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     internal abstract class CastDrawTask : DrawTask
     {

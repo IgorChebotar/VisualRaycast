@@ -1,7 +1,7 @@
 ﻿using SimpleMan.Utilities;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     internal class BoxOverlapDrawTask : DrawTask
     {
@@ -29,7 +29,7 @@ namespace SimpleMan.VisualRaycast.Presentation
         public override void Draw()
         {
             Color color = _result ? _hitColor : _missColor;
-            ComplexGizmos.DrawBox(_from, _size, _rotation, color);
+            ComplexGizmos.DrawWireBox(_from, _size, _rotation, color);
 
             if (!_result)
                 return;
@@ -39,7 +39,7 @@ namespace SimpleMan.VisualRaycast.Presentation
                 if (hit.NotExist())
                     continue;
 
-                ComplexGizmos.DrawHitSphere(hit.ClosestPoint(_from), _hitPointRadius, color);
+                ComplexGizmos.DrawSphere(hit.ClosestPoint(_from), _hitPointRadius, color);
             }
         }
     }

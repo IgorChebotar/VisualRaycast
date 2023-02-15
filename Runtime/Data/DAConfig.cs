@@ -1,7 +1,7 @@
 ﻿using SimpleMan.Utilities;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisibleRaycast
 {
     [CreateAssetMenu(fileName = "RAR", menuName = "VR/Config")]
     public class DAConfig : ScriptableObject 

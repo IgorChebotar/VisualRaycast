@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisibleRaycast
 {
     public static class MonoBehaviourExtensions
     {

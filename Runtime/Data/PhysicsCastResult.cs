@@ -1,7 +1,7 @@
 ﻿using SimpleMan.Utilities;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisibleRaycast
 {
     /// <summary>
     /// Contains the result of a physics raycast.

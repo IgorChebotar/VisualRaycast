@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     internal class BoxcastMultiDrawTask : CastDrawTask
     {
@@ -36,7 +36,7 @@ namespace SimpleMan.VisualRaycast.Presentation
         private void DrawMissedRay()
         {
             ComplexGizmos.DrawRay(_from, _direction, _distance, _missColor);
-            ComplexGizmos.DrawBox(_from + _direction * _distance, _size, _orientation, _missColor);
+            ComplexGizmos.DrawWireBox(_from + _direction * _distance, _size, _orientation, _missColor);
         }
 
         private void DrawHitRay()
@@ -45,13 +45,13 @@ namespace SimpleMan.VisualRaycast.Presentation
 
             foreach (var hit in _castResult.hits)
             {
-                ComplexGizmos.DrawBox(_from + _direction * hit.distance, _size, _orientation, _hitColor);
-                ComplexGizmos.DrawHitSphere(hit.point, _hitPointRadius, _hitColor);
+                ComplexGizmos.DrawWireBox(_from + _direction * hit.distance, _size, _orientation, _hitColor);
+                ComplexGizmos.DrawSphere(hit.point, _hitPointRadius, _hitColor);
             }
 
             ComplexGizmos.DrawRay(_from, _direction, lastHit.distance, _hitColor);
             ComplexGizmos.DrawRay(_from + _direction * lastHit.distance, _direction, _distance - lastHit.distance, _missColor);
-            ComplexGizmos.DrawBox(_from + _direction * _distance, _size, _orientation, _missColor);
+            ComplexGizmos.DrawWireBox(_from + _direction * _distance, _size, _orientation, _missColor);
         }
     }
 }

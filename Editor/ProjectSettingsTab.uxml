@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <ui:Label text="Physics Visualization" display-tooltip-when-elided="true" style="font-size: 18px; -unity-font-style: bold; padding-left: 4px; padding-bottom: 10px;" />
-    <ui:Button text="Documentation" display-tooltip-when-elided="true" name="DocumentionButton" style="width: 123px; -unity-text-align: middle-center;" />
+    <ui:Label text="Visible Raycast" display-tooltip-when-elided="true" style="font-size: 18px; -unity-font-style: bold; padding-left: 4px; padding-bottom: 10px;" />
     <ui:VisualElement name="Space" style="flex-direction: row; justify-content: space-between; height: 22px;" />
     <ui:SliderInt picking-mode="Ignore" label="Max Draw Tasks Count" value="2048" high-value="8192" name="MaxDrawTasksCount" low-value="128" show-input-field="true" tooltip="Sets the maximum number of draw tasks that can be executed simultaneously" />
     <ui:Slider picking-mode="Ignore" label="Gizmo Life Time" value="1" high-value="5" low-value="0" name="GizmoLifeTime" show-input-field="true" tooltip="Life time of gizmos in seconds" />

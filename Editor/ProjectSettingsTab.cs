@@ -6,7 +6,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using SimpleMan.Utilities;
 
-namespace SimpleMan.VisualRaycast.Editor
+namespace SimpleMan.VisibleRaycast.Editor
 {
     internal static class ProjectSettingsTab
     {
@@ -20,11 +20,11 @@ namespace SimpleMan.VisualRaycast.Editor
             BindResetButton(visualTreeInstance, config);
 
 
-            var provider = new SettingsProvider("Project/Visual Raycast", SettingsScope.Project)
+            var provider = new SettingsProvider("Project/" + Constants.PLUGIN_DISPLAYED_NAME, SettingsScope.Project)
             {
-                label = "Visual Raycast",
+                label = Constants.PLUGIN_DISPLAYED_NAME,
 
-                keywords = new HashSet<string>(new[] { "Visual", "Physics", "Raycast" }),
+                keywords = new HashSet<string>(new[] { "Visible", "Visual", "Physics", "Raycast" }),
 
                 
                 activateHandler = (searchContext, rootElement) =>
@@ -46,18 +46,12 @@ namespace SimpleMan.VisualRaycast.Editor
         {
             var serializedConfig = new SerializedObject(config);
 
-            treeInstance.Q<Button>("DocumentionButton").clicked += DocumentationButtonckClicked;
             treeInstance.Q<SliderInt>("MaxDrawTasksCount").bindingPath = "_maxDrawTasksCount";
             treeInstance.Q<Slider>("GizmoLifeTime").bindingPath = "_gizmoLifeTime";
             treeInstance.Q<Slider>("HitPointRadius").bindingPath = "_hitPointRadius";
             treeInstance.Q<ColorField>("HitColor").bindingPath = "_hitColor";
             treeInstance.Q<ColorField>("MissColor").bindingPath = "_missColor";
             treeInstance.Bind(serializedConfig);
-        }
-
-        private static void DocumentationButtonckClicked()
-        {
-            Application.OpenURL(Constants.DOCUMENTATION_URL);
         }
 
         private static TemplateContainer GetVisualTreeInstance()

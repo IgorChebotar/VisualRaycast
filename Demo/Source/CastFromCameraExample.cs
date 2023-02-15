@@ -1,4 +1,4 @@
-﻿using SimpleMan.VisualRaycast;
+﻿using SimpleMan.VisibleRaycast;
 using SimpleMan.Utilities;
 using System.Linq;
 using UnityEngine;

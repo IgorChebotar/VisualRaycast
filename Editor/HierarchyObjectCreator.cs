@@ -1,9 +1,9 @@
-using SimpleMan.VisualRaycast.Presentation;
+using SimpleMan.VisibleRaycast.Presentation;
 using SimpleMan.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast.Editor
+namespace SimpleMan.VisibleRaycast.Editor
 {
     public static class HierarchyObjectCreator
     {

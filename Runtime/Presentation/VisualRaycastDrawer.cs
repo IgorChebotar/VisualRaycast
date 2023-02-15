@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     [AddComponentMenu("Simple Man/Visual Raycast/Physics Visualizer")]
     public class VisualRaycastDrawer : MonoBehaviour

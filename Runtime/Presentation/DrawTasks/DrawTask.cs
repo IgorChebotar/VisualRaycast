@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SimpleMan.Utilities;
 
-namespace SimpleMan.VisualRaycast.Presentation
+namespace SimpleMan.VisibleRaycast.Presentation
 {
     internal abstract class DrawTask
     {

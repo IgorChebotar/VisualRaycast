@@ -1,4 +1,4 @@
-﻿using SimpleMan.VisualRaycast;
+﻿using SimpleMan.VisibleRaycast;
 using SimpleMan.Utilities;
 using System.Linq;
 using UnityEngine;
@@ -23,6 +23,7 @@ namespace SimpleMan.VisualRaycastDemo
                 FromMainCamera().
                 ToMousePositionInWorld().
                 SingleHit().
+                WithMaxDistance().
                 UseDefaultLayerMask().
                 IgnoreObjects(_ignoreObjects);
 

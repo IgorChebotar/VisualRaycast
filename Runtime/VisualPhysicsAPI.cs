@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SimpleMan.VisualRaycast
+namespace SimpleMan.VisibleRaycast
 {
     /// <summary>
     /// Contains methods for performing and visualizing physics casting operations in Unity, 

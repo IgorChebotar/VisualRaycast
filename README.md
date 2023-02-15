@@ -1,15 +1,10 @@
-# Visual raycast [Download](https://github.com/IgorChebotar/VisualRaycast/releases)
+# Visual raycast
 Raycast utilities and visualizer for Unity. Not required any additional components or interfaces on your objects. No conflicts with the standard unity raycast.
 
 
 **Author:** [Igor-Valerii Chebotar](https://www.linkedin.com/in/igor-chebotar/)
 <br>
 **Email:**  igor.valerii.chebotar@gmail.com
-
-
-## Requirements
-* [Simple Man - AsyncOperations](https://github.com/IgorChebotar/Utilities/releases)
-* [Simple Man - Utilities](https://github.com/IgorChebotar/Utilities/releases)
 
 
 ## How to install plugin?
@@ -125,6 +120,8 @@ UseCustomLayerMask(1 << 9).
 IgnoreObjects(gameObject);
 ```
 
+
+
 ## Spherecast and boxcast
 You can use this operations the same way as 'Raycast'. Example:
 ```C#
@@ -194,5 +191,12 @@ This is mono class that draws the gizmos. You can delete it from scene, if you d
 You can change color of the gizmos, hit poins size and other settings in project settings tab, that can be found by path:
 Project settings -> Visual raycast
 
+## Can I use standard Physics.*cast functions?
+Yes, but they will not be visualized. 
 
+## Can I use classic way to declarate cast functions?
+You can use classics variant of functions like:
+```C#
+VisualRaycastAPI.ClassicRaycast(Vector3 from, Vector3 direction, float distance, bool singleCast, Collider[] collidersToIgnore, LayerMask layerMask)
+```
 

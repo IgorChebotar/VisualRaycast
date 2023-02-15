@@ -1,5 +1,5 @@
 ﻿using SimpleMan.AsyncOperations;
-using SimpleMan.VisualRaycast;
+using SimpleMan.VisibleRaycast;
 using UnityEngine;
 
 namespace SimpleMan.VisualRaycastDemo
