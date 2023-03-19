@@ -6,7 +6,6 @@ namespace SimpleMan.VisibleRaycast
 {
     internal static class ComplexGizmos
     {
-#if UNITY_EDITOR
         private const float MAX_DRAW_DISTANCE = 100000;
 
 
@@ -260,6 +259,7 @@ namespace SimpleMan.VisibleRaycast
 
         public static void DrawWireCapsule(Vector3 center, float radius, float height, Quaternion rotation, Color color)
         {
+#if UNITY_EDITOR
             Color previousColor = Handles.color;
             Handles.color = color;
 
@@ -282,6 +282,7 @@ namespace SimpleMan.VisibleRaycast
                 Handles.DrawWireDisc(Vector3.down * pointOffset, Vector3.up, radius);
             }
             Handles.color = previousColor;
+#endif
         }
 
         public static void DrawCapsule(Vector3 center, float radius, float height, Quaternion rotation, Color color)
@@ -330,6 +331,5 @@ namespace SimpleMan.VisibleRaycast
                 return Quaternion.Euler(euler);
             }
         }
-#endif
     }
 }

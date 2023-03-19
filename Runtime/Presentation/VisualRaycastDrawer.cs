@@ -9,6 +9,7 @@ namespace SimpleMan.VisibleRaycast.Presentation
     [AddComponentMenu("Simple Man/Visual Raycast/Physics Visualizer")]
     public class VisualRaycastDrawer : MonoBehaviour
     {
+#if UNITY_EDITOR
         private List<DrawTask> _drawTasks;
         private List<DrawTask> _drawTasksToRemove;
         private DAConfig _config;
@@ -277,5 +278,6 @@ namespace SimpleMan.VisibleRaycast.Presentation
 
             _drawTasks.Add(task);
         }
+#endif
     }
 }
